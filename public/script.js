@@ -1,6 +1,14 @@
-<<<<<<< HEAD
-<<<<<<<< HEAD:script.js
-let seatsLeft = 6;
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/seats')
+        .then(response => response.json())
+        .then(data => {
+            seatsLeft = data.availableSeats;
+            document.getElementById('seatsLeft').textContent = `${seatsLeft} seats left`;
+        })
+        .catch(error => {
+            console.error('Error fetching seats:', error);
+        });
+});
 
 document.getElementById('bookingForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -9,70 +17,23 @@ document.getElementById('bookingForm').addEventListener('submit', function(event
     const email = event.target.email.value;
     const age = event.target.age.value;
 
-    if (seatsLeft > 0) {
-        fetch('/book', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, email, age })
-        }).then(response => response.json())
-          .then(data => {
-              if (data.error) {
-                  alert(data.error);
-              } else {
-                  seatsLeft--;
-                  document.getElementById('seatsLeft').textContent = `${seatsLeft} seats left`;
-                  alert(`Booking confirmed! Your code is: ${data.code}`);
-              }
-          }).catch(error => {
-              console.error('Error:', error);
-              alert('An error occurred while booking. Please try again.');
-          });
-    } else {
-        alert('No seats left!');
-    }
+    fetch('/book', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, age })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              alert(data.error);
+          } else {
+              seatsLeft = data.availableSeats; // Update seatsLeft from server response
+              document.getElementById('seatsLeft').textContent = `${seatsLeft} seats left`;
+              alert('Booking confirmed! Check your email for the booking code.');
+          }
+      }).catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while booking. Please try again.');
+      });
 });
-========
-=======
->>>>>>> 254cbeb (Your commit message)
-let seatsLeft = 6;
-
-document.getElementById('bookingForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const name = event.target.name.value;
-    const email = event.target.email.value;
-    const age = event.target.age.value;
-<<<<<<< HEAD
-
-=======
->>>>>>> 254cbeb (Your commit message)
-    if (seatsLeft > 0) {
-        fetch('/book', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, email, age })
-        }).then(response => response.json())
-          .then(data => {
-              if (data.error) {
-                  alert(data.error);
-              } else {
-                  seatsLeft--;
-                  document.getElementById('seatsLeft').textContent = `${seatsLeft} seats left`;
-                  alert(`Booking confirmed! Your code is: ${data.code}`);
-              }
-          }).catch(error => {
-              console.error('Error:', error);
-              alert('An error occurred while booking. Please try again.');
-          });
-    } else {
-        alert('No seats left!');
-    }
-});
-<<<<<<< HEAD
->>>>>>>> 254cbeb (Your commit message):public/script.js
-=======
->>>>>>> 254cbeb (Your commit message)
