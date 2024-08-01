@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const port = 3000;
 
@@ -12,7 +13,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 const bookingCodesArray = ['google', 'hi', 'bye', 'ai', 'why', 'goodbye'];
 let bookingCodesIndex = 0; // To track the current index in the booking codes array
 let bookedEmails = new Set();
-let availableSeats = 6; // Set to 6 seats
+let availableSeats = 6; // Default value
+
+// Load available seats from file
+const seatsFilePath = path.join(__dirname, 'availableSeats.json');
+if (fs.existsSync(seatsFilePath)) {
+    const data = fs.readFileSync(seatsFilePath, 'utf8');
+    availableSeats = JSON.parse(data).availableSeats;
+}
+
+// Save available seats to file
+const saveSeatsToFile = () => {
+    fs.writeFileSync(seatsFilePath, JSON.stringify({ availableSeats }), 'utf8');
+};
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -37,6 +50,7 @@ app.listen(port, () => {
 
 // Endpoint to get available seats
 app.get('/seats', (req, res) => {
+    console.log(`Available seats: ${availableSeats}`); // Log the current value
     res.json({ availableSeats });
 });
 
@@ -57,9 +71,10 @@ app.post('/book', (req, res) => {
     bookingCodesIndex++;
     bookedEmails.add(email);
     availableSeats--; // Decrease available seats
+    saveSeatsToFile(); // Save the updated number of seats to file
 
     const mailOptions = {
-        from: 'ibkamoukam@gmail.com', // Your Gmail address
+        from: 'ibkamnoukam@gmail.com', // Your Gmail address
         to: email, // Recipient's email address
         subject: 'Booking Confirmation',
         text: `Hi ${name},\n\nYour booking is confirmed. Your code is: ${code}\n\nEnjoy the movie!`
