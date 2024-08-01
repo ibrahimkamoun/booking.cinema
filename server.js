@@ -12,18 +12,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 const bookingCodesArray = ['google', 'hi', 'bye', 'ai', 'why', 'goodbye'];
 let bookingCodesIndex = 0; // To track the current index in the booking codes array
 let bookedEmails = new Set();
-let availableSeats = 10; // Total available seats
+let availableSeats = 6; // Set to 6 seats
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'ibkamoukam@gmail.com', // Your Gmail address
-        pass: 'dikv hpba tkbf lgkh'     // Your app-specific password
+        user: 'ibkamnoukam@gmail.com', // Your Gmail address
+        pass: 'ifpl kisa abts tkuv'     // Your app-specific password
     }
 });
 
+// Serve the HTML files
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/booking.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'booking.html'));
+});
+
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
 
 // Endpoint to get available seats
@@ -59,9 +68,9 @@ app.post('/book', (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error('Error sending email:', error);
-            return res.status(500).send('Error sending email');
+            return res.status(500).json({ error: 'Error sending email' });
         }
         console.log('Email sent: ' + info.response);
-        res.json({ code });
+        res.json({ message: 'Booking confirmed! Check your email for the booking code.', availableSeats });
     });
 });
