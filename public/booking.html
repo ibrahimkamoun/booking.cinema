@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #available-seats {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Booking System</h1>
+    <h2>Available Seats: <span id="available-seats">10</span></h2>
+    <button id="book-seat">Book a Seat</button>
+
+    <script>
+        const availableSeatsElement = document.getElementById('available-seats');
+
+        // Load available seats from local storage or set to initial value
+        const loadAvailableSeats = () => {
+            const seats = localStorage.getItem('availableSeats');
+            return seats ? parseInt(seats) : 10; // Default to 10 if not set
+        };
+
+        const updateAvailableSeats = (seats) => {
+            localStorage.setItem('availableSeats', seats);
+            availableSeatsElement.textContent = seats;
+        };
+
+        // Initialize available seats
+        let availableSeats = loadAvailableSeats();
+        updateAvailableSeats(availableSeats);
+
+        document.getElementById('book-seat').addEventListener('click', () => {
+            if (availableSeats > 0) {
+                // Simulate booking process (you can replace this with actual user input)
+                const name = prompt("Enter your name:");
+                const email = prompt("Enter your email:");
+
+                fetch('/book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, age: 30 }) // Adjust age as necessary
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code) {
+                        availableSeats--;
+                        updateAvailableSeats(availableSeats);
+                        alert(`Booking successful! Your code is: ${data.code}`);
+                    } else {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('No seats available.');
+            }
+        });
+    </script>
+</body>
+</html>
