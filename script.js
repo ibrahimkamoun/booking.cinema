@@ -6,7 +6,6 @@ document.getElementById('bookingForm').addEventListener('submit', function(event
     const name = event.target.name.value;
     const email = event.target.email.value;
     const age = event.target.age.value;
-
     if (seatsLeft > 0) {
         fetch('/book', {
             method: 'POST',
