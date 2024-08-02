@@ -90,7 +90,7 @@ app.post('/book', (req, res) => {
         from: 'ibkamnoukam@gmail.com', // Your Gmail address
         to: email, // Recipient's email address
         subject: 'Booking Confirmation',
-        html: `<p>Hi ${name},</p><p>Your booking is confirmed. Here is your ticket:</p><a href="${ticketImageURL}">View Ticket</a><p>Enjoy the movie!</p>`
+        html: `<p>Hi ${name},</p><p>Your booking is confirmed. Here is your ticket:</p><a href="${ticketImageURL}"></a><p>Enjoy the movie!</p>`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
