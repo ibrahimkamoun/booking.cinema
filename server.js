@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // URL to the ticket image
-const ticketImageURL = 'https://ibb.co/58wZWqy';
+const ticketImageURL = 'https://photos.app.goo.gl/oFTaQjbx3knFcHtd7';
 let bookedEmails = new Set();
 let availableSeats = 6; // Default value
 
