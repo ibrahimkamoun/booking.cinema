@@ -9,8 +9,6 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// URL to the ticket image
-const ticketImageURL = 'https://photos.app.goo.gl/oFTaQjbx3knFcHtd7';
 let bookedEmails = new Set();
 let availableSeats = 6; // Default value
 
@@ -90,7 +88,7 @@ app.post('/book', (req, res) => {
         from: 'ibkamnoukam@gmail.com', // Your Gmail address
         to: email, // Recipient's email address
         subject: 'Booking Confirmation',
-        html: `<p>Hi ${name},</p><p>Your booking is confirmed. Here is your ticket:</p>${ticketImageURL}<p>Enjoy the movie!</p>`
+        html: `<p>Hi ${name},</p><p>Your booking is confirmed. Here is your ticket:</p>https://drive.google.com/file/d/1xrA4ch_uowBPYj_9U83CYgHl8PhpNsgv/view?usp=drive_link<p>Enjoy the movie!</p>`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
